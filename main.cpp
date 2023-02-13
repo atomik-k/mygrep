@@ -1,11 +1,10 @@
 #include <iostream>
-#include <locale.h>
 #include <string>
 #include <fstream>
 
 using namespace std;
 
-int main(int argc, char const *argv[])
+void incr1()
 {
     string search, query;
     int matchPos = 0;
@@ -44,6 +43,54 @@ int main(int argc, char const *argv[])
     {
         cout << "'" << query << "' NOT found in '" << search << "'";
     }
+}
+
+int main(int argc, char const *argv[])
+{
+    if (argc <= 1)
+    {
+        incr1();
+    }
+
+    ifstream file(argv[2]);
+    if (!file)
+    {
+        cerr << "Error opening file" << endl;
+        return 1;
+    }
+    string query = argv[1];
+
+    string currLine;
+    bool skip = false;
+    while (getline(file, currLine))
+    {
+        for (int i = 0; i < currLine.length(); i++)
+        {
+            if(skip)
+            {
+                skip = false;
+                break;
+            }
+            if (currLine[i] != query[0])
+            {
+                continue;
+            }
+            for (int j = 0; j < query.length(); j++)
+            {
+                if (query[j] != currLine[i + j])
+                {
+                    break;
+                }
+                if (j == query.length() - 1)
+                {
+                    cout << "\t" << currLine << "\n";
+                    skip = true;
+                }
+            }
+        }
+    }
+
+    file.close();
 
     return 0;
 }
