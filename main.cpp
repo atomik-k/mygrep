@@ -167,15 +167,15 @@ int main(int argc, char const *argv[])
 
     string currLine;
     bool skip = false;
-    int line = 1, occur = 0;
+    int line = 0, occur = 0;
     while (getline(file, currLine))
     {
+        line++;
         if (!ops.caseSens) // muuttaa hakusanan ja rivin samankokoisiksi
         {
             transform(currLine.begin(), currLine.end(), currLine.begin(), ::tolower);
             transform(query.begin(), query.end(), query.begin(), ::tolower);
         }
-        line++;
         for (int i = 0; i < currLine.length(); i++)
         {
             if (i == currLine.length() - 1 && ops.reverse) // tulostaa reverse
